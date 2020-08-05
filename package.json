@@ -1,0 +1,17 @@
+{
+  "name": "chatbot_markov",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "markov-strings": "^2.1.1",
+    "mongoose": "^5.9.27",
+    "telegraf": "^3.38.0"
+  }
+}

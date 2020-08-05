@@ -2,7 +2,7 @@ const group = require('./models/group');
 
 module.exports = {
 
-  findGroupByID: async (ctx) => {
+  findGroupByIdOrCreate: async (ctx) => {
 
     let groupChat = await group.findOne({ groupID: ctx.chat.id });
 
@@ -18,6 +18,14 @@ module.exports = {
       return newGroupChat;
     
     }
+
+    return groupChat;
+
+  },
+
+  findGroupByID: async (groupID) => {
+
+    let groupChat = await group.findOne({ groupID });
 
     return groupChat;
 

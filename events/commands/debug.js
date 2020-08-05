@@ -6,7 +6,7 @@ module.exports = Composer.mount(
   'message',
   async (ctx) => {
 
-    let groupSettings = await db.findGroupByID(ctx);
+    let groupSettings = await db.findGroupByIdOrCreate(ctx);
 
     let admins = await ctx.getChatAdministrators();
 

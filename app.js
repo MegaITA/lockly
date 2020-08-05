@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv').config();
 const Composer = require('telegraf/composer');
 
-
 const bot = new telegraf.Telegraf(process.env.BOT_TOKEN);
 
 (async () => {

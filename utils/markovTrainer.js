@@ -13,7 +13,7 @@ module.exports = async () => {
 
     console.info(`Started training for ${group.groupID} with ${group.messages.length} messages.`);
 
-    let markov = new Markov(group.messages.slice(0, 10000), { stateSize: 1 });
+    let markov = new Markov(group.messages, { stateSize: 1 });
 
     await markov.buildCorpusAsync();
 

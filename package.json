@@ -12,6 +12,7 @@
     "dotenv": "^8.2.0",
     "markov-strings": "^2.1.1",
     "mongoose": "^5.9.27",
+    "node-schedule": "^1.3.2",
     "telegraf": "^3.38.0"
   }
 }

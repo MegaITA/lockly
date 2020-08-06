@@ -13,6 +13,11 @@ const groupSchema = new mongoose.Schema({
     required: true
   },
 
+  corpus: {
+    type: String,
+    default: null
+  },
+
   debugMode: {
     type: Boolean,
     default: false

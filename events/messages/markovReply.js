@@ -12,14 +12,39 @@ module.exports = Composer.mount(
     const groupChat = await db.findGroupByIdOrCreate(ctx);
 
     let markov = new Markov(groupChat.messages, { stateSize: 2 });
-    await markov.buildCorpusAsync();
+    
+    // Load pre-trained corpus to make the bot faster, the corpus will be trained for each group every x time
+    let preTrainedCorpus = await db.getCorpus(ctx.chat.id);
+
+    // If we don't have already a pre-trained corpus, the group chat is new, so we will train it since it shouldn't take so long
+    if(!preTrainedCorpus) {
+
+      await markov.buildCorpusAsync();
+
+    } else {
+
+      // If we have the pre-trained corpus, just set the value
+      markov.corpus = preTrainedCorpus;
+
+    }
+
+    // If can't train corpus due to a lack of messages and get back an empty object {}, just save the message and return
+    if(Object.keys(markov.corpus).length === 0) {
+
+      await db.addMessage(ctx.chat.id, ctx.message.text);
+
+      return;
+    
+    }
 
     const markovOptions = {
 
       maxTries: 10000,
       prng: Math.random,
       filter: (result) => {
+
         return result.string.split(' ').length >= 5
+
       }
 
     }
@@ -36,8 +61,6 @@ module.exports = Composer.mount(
 
     }
 
-    groupChat.messages.push(ctx.message.text);
-
-    await groupChat.save();
+    await db.addMessage(ctx.chat.id, ctx.message.text);
 
   });

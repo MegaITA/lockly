@@ -18,7 +18,11 @@ module.exports = {
 
     // console.log(parsedMessages.length);
 
-    groupChat.messages.push(...parsedMessages);
+    for(let msg of parsedMessages) {
+
+      groupChat.messages.push(msg);
+
+    }
 
     groupChat.save();
 

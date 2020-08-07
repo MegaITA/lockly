@@ -47,7 +47,7 @@ module.exports = Composer.mount(
       prng: Math.random,
       filter: (result) => {
 
-        return result.string.split(' ').length >= 5
+        return result.string.endsWith('.')
 
       }
 

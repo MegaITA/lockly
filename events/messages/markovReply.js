@@ -48,12 +48,7 @@ module.exports = Composer.mount(
     const markovOptions = {
 
       maxTries: 10000,
-      prng: Math.random,
-      filter: (result) => {
-
-        return result.string.endsWith('.')
-
-      }
+      prng: Math.random
 
     }
 

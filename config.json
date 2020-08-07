@@ -1,0 +1,14 @@
+{
+
+  "database": {
+
+    "host": "localhost",
+    "port": "27017",
+    "dbName": "Lockly",
+    "authDatabase": "Lockly",
+    "username": "",
+    "password": ""
+
+  }
+
+}

@@ -11,7 +11,7 @@ module.exports = async () => {
   
   for(let group of groupsArray) {
 
-    if(group.messages <= 100) continue;
+    if(group.messages <= 1000) continue;
 
     console.info(`Started training for ${group.groupID} with ${group.messages.length} messages.`);
 

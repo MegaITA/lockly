@@ -6,7 +6,7 @@ const scheduler = require('node-schedule');
 const markovTrainer = require('./utils/markovTrainer');
 const telegramParser = require('./utils/telegramParser');
 
-const trainJob = scheduler.scheduleJob('trainJob', '*/1 * * * *', markovTrainer);
+const trainJob = scheduler.scheduleJob('trainJob', '0 */1 * * *', markovTrainer);
 
 const bot = new telegraf.Telegraf(process.env.BOT_TOKEN);
 

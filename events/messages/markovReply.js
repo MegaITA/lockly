@@ -23,7 +23,11 @@ module.exports = Composer.mount(
 
     } else {
 
-      // If we have the pre-trained corpus, just set the value
+      // If we have the pre-trained corpus, build a small corpus and then change it with the pre-trained one 
+      // (if you have a better solution, please help me, I also tried to save the instance on the database but it's missing the methods)
+
+      await markov.buildCorpusAsync([]);
+
       markov.corpus = preTrainedCorpus;
 
     }

@@ -6,7 +6,7 @@ const scheduler = require('node-schedule');
 const markovTrainer = require('./utils/markovTrainer');
 const telegramParser = require('./utils/telegramParser');
 
-const trainJob = scheduler.scheduleJob('trainJob', '* */1 * * *', markovTrainer);
+const trainJob = scheduler.scheduleJob('trainJob', '*/1 * * * *', markovTrainer);
 
 const bot = new telegraf.Telegraf(process.env.BOT_TOKEN);
 
@@ -26,6 +26,10 @@ groupCommands.on('message', require('./events/messages/markovReply'));
 bot.use(groupCommands);
 
 bot.use(async (ctx, next) => {
+
+  // IDK why sometimes is undefined even message...
+  if(ctx.message == undefined)
+    return;
 
   //If it's not a text message
   if(ctx.message.text == undefined) 

@@ -13,7 +13,7 @@ module.exports = Composer.mount(
 
     let markov = new Markov(groupChat.messages, { 
 
-      stateSize: groupChat.messages <= 1000 ? 1 : 2
+      stateSize: groupChat.messages.length <= 1000 ? 1 : 2
 
     });
     

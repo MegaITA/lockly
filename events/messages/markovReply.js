@@ -11,7 +11,11 @@ module.exports = Composer.mount(
 
     const groupChat = await db.findGroupByIdOrCreate(ctx);
 
-    let markov = new Markov(groupChat.messages, { stateSize: 2 });
+    let markov = new Markov(groupChat.messages, { 
+
+      stateSize: groupChat.messages <= 100 ? 1 : 2
+
+    });
     
     // Load pre-trained corpus to make the bot faster, the corpus will be trained for each group every x time
     let preTrainedCorpus = await db.getCorpus(ctx.chat.id);

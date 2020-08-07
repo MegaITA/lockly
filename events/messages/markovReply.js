@@ -53,17 +53,30 @@ module.exports = Composer.mount(
 
     }
 
-    const markovReply = await markov.generateAsync(markovOptions);
+    let debugMessage;
 
-    if (!groupChat.debugMode) {
+    try {
+      
+      const markovReply = await markov.generateAsync(markovOptions);
 
-      ctx.reply(markovReply.string);
+      if (!groupChat.debugMode) {
+  
+        ctx.reply(markovReply.string);
+  
+      } else {
+  
+        debugMessage = `<b>MESSAGGIO DEBUG</b>\n<b>Risposta:</b> ${markovReply.string}\n<b>Prove (tries):</b> ${markovReply.tries}\n<b>Score:</b> ${markovReply.score}\n<b>Refs:</b> ${JSON.stringify(markovReply.refs)}`;
+  
+      }
+      
+    } catch (error) {
 
-    } else {
-
-      ctx.replyWithHTML(`<b>MESSAGGIO DEBUG</b>\n<b>Risposta:</b> ${markovReply.string}\n<b>Prove (tries):</b> ${markovReply.tries}\n<b>Score:</b> ${markovReply.score}\n<b>Refs:</b> ${JSON.stringify(markovReply.refs)}`);
-
+      debugMessage = `<b>MESSAGGIO DEBUG</b>\n<b>Errore:</b> ${error.message}`;
+      
     }
+
+    if(groupChat.debugMode)
+      ctx.replyWithHTML(debugMessage);
 
     await db.addMessage(ctx.chat.id, ctx.message.text);
 

@@ -5,11 +5,13 @@ module.exports = async () => {
 
   const groupsArray = await db.getGroups();
 
-  console.info(`Starting scheduled training job.`);
+  console.info(`Starting scheduled training job at ${Date.now()}`);
 
   let i = 0;
   
   for(let group of groupsArray) {
+
+    if(group.messages <= 100) continue;
 
     console.info(`Started training for ${group.groupID} with ${group.messages.length} messages.`);
 
@@ -25,6 +27,6 @@ module.exports = async () => {
 
   }
 
-  console.info(`Finished training job. Trained ${i} groups.`);
+  console.info(`Finished training job at ${Date.now()}. Trained ${i} groups.`);
 
 }

@@ -1,13 +1,13 @@
 {
-  "name": "chatbot_markov",
+  "name": "lockly",
   "version": "1.0.0",
-  "description": "",
+  "description": "A stupid markov chatbot",
   "main": "app.js",
   "scripts": {
     "start": "node app.js"
   },
   "author": "",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "dependencies": {
     "dotenv": "^8.2.0",
     "markov-strings": "^2.1.1",

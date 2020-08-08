@@ -38,6 +38,8 @@ const bot = new telegraf.Telegraf(process.env.BOT_TOKEN);
 const groupCommands = new Composer();
 
 groupCommands.command('/debug', require('./events/commands/debug'));
+groupCommands.command('/enable', require('./events/commands/enable'));
+groupCommands.command('/disable', require('./events/commands/disable'));
 groupCommands.on('message', require('./events/messages/markovReply'));
 
 bot.use(groupCommands);

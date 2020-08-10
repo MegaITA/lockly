@@ -112,6 +112,30 @@ module.exports = {
 
   },
 
+  clearMessages: async (gid) => {
+
+    let groupChat = await GroupMessages.findOne({ where: { groupGid: gid } });
+
+    let groupCorpus = await GroupCorpus.findOne({ where: { groupGid: gid } });
+
+    if(groupCorpus) {
+      
+      groupCorpus.corpus = {};
+
+      await groupCorpus.save();
+
+    }
+
+    if(groupChat) {
+
+      groupChat.messages = [];
+
+      await groupChat.save();
+    
+    }
+
+  },
+
   getGroups: async () => {
 
     let groupChats = await Group.findAll();

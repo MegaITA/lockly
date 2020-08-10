@@ -1,37 +1,14 @@
 const telegraf = require('telegraf');
-const mongoose = require('mongoose');
 const dotenv = require('dotenv').config();
 const Composer = require('telegraf/composer');
 const scheduler = require('node-schedule');
 const markovTrainer = require('./utils/markovTrainer');
 const telegramParser = require('./utils/telegramParser');
-const { database } = require('./config.json');
+const db = require('./db/db');
 
 const trainJob = scheduler.scheduleJob('trainJob', '*/30 * * * *', markovTrainer);
 
 const bot = new telegraf.Telegraf(process.env.BOT_TOKEN);
-
-(async () => {
-
-  if(database.username == "") {
-
-    await mongoose.connect(`mongodb://${database.host}:${database.port}/${database.dbName}`, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
-  
-    console.log('☁ Database Connected');
-
-  } else {
-
-    await mongoose.connect(`mongodb://${database.username}:${database.password}@${database.host}:${database.port}/${database.dbName}?authSource=${database.authDatabase}`, { 
-      useNewUrlParser: true, 
-      useUnifiedTopology: true, 
-      useCreateIndex: true 
-    });
-  
-    console.log('☁ Database Connected');
-
-  }
-  
-})();
 
 // Middleware
 

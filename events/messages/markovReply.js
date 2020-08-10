@@ -9,11 +9,13 @@ module.exports = Composer.mount(
     if (ctx.updateType != 'message' || !ctx.message.text)
       return;
 
-    const groupChat = await db.findGroupByIdOrCreate(ctx);
+    const group = await db.findGroupByIdOrCreate(ctx);
 
-    let markov = new Markov(groupChat.messages, { 
+    let groupChat = await db.getMessages(ctx.chat.id);
 
-      stateSize: groupChat.messages.length <= 1000 ? 1 : 2
+    let markov = new Markov(groupChat, { 
+
+      stateSize: groupChat.length <= 1000 ? 1 : 2
 
     });
     

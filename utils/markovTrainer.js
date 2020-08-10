@@ -11,17 +11,23 @@ module.exports = async () => {
   
   for(let group of groupsArray) {
 
-    if(group.messages.length <= 1000) continue;
+    let groupMessages = await db.getMessages(group.gid);
 
-    console.info(`Started training for ${group.groupID} with ${group.messages.length} messages.`);
+    if(groupMessages.length <= 1000) continue;
 
-    let markov = new Markov(group.messages, { stateSize: 1 });
+    console.info(`Started training for ${group.gid} with ${groupMessages.length} messages.`);
+
+    let markov = new Markov(groupMessages, { 
+
+      stateSize: groupMessages.length <= 1000 ? 1 : 2 
+
+    });
 
     await markov.buildCorpusAsync();
 
-    await db.updateCorpus(group.groupID, markov.corpus);
+    await db.updateOrCreateCorpus(group.gid, markov.corpus);
     
-    console.info(`Finished training for ${group.groupID}.`);
+    console.info(`Finished training for ${group.gid}.`);
 
     i++;
 

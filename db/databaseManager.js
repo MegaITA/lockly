@@ -1,52 +1,77 @@
-const group = require('./models/group');
+const Group = require('./models/group');
+const GroupMessages = require('./models/groupMessages');
+const GroupCorpus = require('./models/groupCorpus');
+const sequelize = require('sequelize');
+const groupMessages = require('./models/groupMessages');
 
 module.exports = {
 
   findGroupByIdOrCreate: async (ctx) => {
 
-    let groupChat = await group.findOne({ groupID: ctx.chat.id });
+    let group = await Group.findOne({ where: { gid: ctx.chat.id } });
 
-    if(!groupChat) {
+    if(!group) {
 
-      let newGroupChat = await group.create({
+      let newGroup = await Group.create({
 
-        groupID: ctx.chat.id,
+        gid: ctx.chat.id,
+        enabled: true,
+        debugMode: false
+        
+      });
+
+      let newMessage = await GroupMessages.create({
+
+        groupGid: ctx.chat.id,
         messages: [ctx.message.text]
 
       });
 
-      return newGroupChat;
+      return newGroup;
     
     }
 
-    return groupChat;
+    return group;
 
   },
 
-  findGroupByID: async (groupID) => {
+  findGroupByID: async (gid) => {
 
-    let groupChat = await group.findOne({ groupID });
+    let groupChat = await Group.findOne({ where: { gid } });
 
     return groupChat;
 
   },
   
-  getCorpus: async (groupID) => {
+  getCorpus: async (gid) => {
 
-    let groupChat = await group.findOne({ groupID });
+    let corpus = await GroupCorpus.findOne({ where: { groupGid: gid } });
 
-    if(!groupChat.corpus)
+    if(!corpus)
       return false;
 
-    return JSON.parse(groupChat.corpus);
+    return corpus;
 
   },
 
-  updateCorpus: async (groupID, corpus) => {
+  updateOrCreateCorpus: async (gid, corpus) => {
 
-    let groupChat = await group.findOne({ groupID });
+    let groupChat = await GroupCorpus.findOne({ where: { groupGid: gid } });
 
-    groupChat.corpus = JSON.stringify(corpus);
+    if(!groupChat) {
+
+      let newCorpus = await GroupCorpus.create({
+
+        groupGid: gid,
+        corpus: corpus
+
+      });
+
+      return;
+
+    }
+
+    groupChat.corpus = corpus;
 
     groupChat.save();
 
@@ -54,21 +79,27 @@ module.exports = {
 
   },
 
-  getMessages: async (groupID) => {
+  getMessages: async (gid) => {
 
-    let groupChat = await group.findOne({ groupID });
+    let groupChat = await GroupMessages.findOne({ where: { groupGid: gid } });
+
+    if(!groupChat)
+      return false;
 
     return groupChat.messages;
   
   },
 
-  addMessage: async (groupID, message) => {
+  addMessage: async (gid, message) => {
 
-    let groupChat = await group.findOne({ groupID });
+    let groupChat = await GroupMessages.findOne({ where: { groupGid: gid } });
 
-    groupChat.messages.push(message);
+    // Creating a new array instead of pushing since sequelize doesn't detect push changes and refuses to save the array.
+    let newArr = [message, ...groupChat.messages];
 
-    groupChat.save();
+    groupChat.messages = newArr;
+
+    await groupChat.save();
 
     return true;
 
@@ -76,7 +107,7 @@ module.exports = {
 
   getGroups: async () => {
 
-    let groupChats = await group.find({});
+    let groupChats = await Group.findAll();
 
     return groupChats;
 

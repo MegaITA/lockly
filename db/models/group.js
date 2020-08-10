@@ -1,33 +1,28 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../db');
 
-const groupSchema = new mongoose.Schema({
 
-  groupID: {
-    type: String,
+const group = sequelize.define('group', {
+
+  gid: {
+    type: DataTypes.INTEGER,
     unique: true,
-    required: true
-  },
-  
-  messages: {
-    type: Array,
-    required: true
-  },
-
-  corpus: {
-    type: String,
-    default: null
+    allowNull: false,
+    primaryKey: true
   },
 
   debugMode: {
-    type: Boolean,
-    default: false
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   },
 
   enabled: {
-    type: Boolean,
-    default: true
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
   }
 
-});
+}, { timestamps: false });
 
-module.exports = mongoose.model('group', groupSchema);
+group.sync();
+
+module.exports = group;

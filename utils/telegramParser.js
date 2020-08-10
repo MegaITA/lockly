@@ -1,14 +1,20 @@
 const db = require('../db/databaseManager');
 const fs = require('fs');
+const groupMessages = require('../db/models/groupMessages');
 
 module.exports = {
 
   parseGroupJSON: async (groupID, path) => {
 
-    let groupChat = await db.findGroupByID(groupID);
+    let group = await db.findGroupByID(groupID);
+
+    if(!group)
+      throw new Error(`Unable to find a group with groupID: ${groupID}`);
+
+    let groupChat = await db.getMessages(groupID);
 
     if(!groupChat)
-      throw new Error(`Unable to find a group with groupID: ${groupID}`);
+      throw new Error(`Unable to find a group chat with groupID: ${groupID}`);
 
     const JSONFile = await JSON.parse(fs.readFileSync(path, { encoding: 'utf-8' }));
 
@@ -18,11 +24,7 @@ module.exports = {
 
     // console.log(parsedMessages.length);
 
-    for(let msg of parsedMessages) {
-
-      groupChat.messages.push(msg);
-
-    }
+    groupChat.messages = parsedMessages;
 
     groupChat.save();
 

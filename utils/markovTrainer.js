@@ -11,15 +11,15 @@ module.exports = async () => {
   
   for(let group of groupsArray) {
 
-    let groupMessages = await db.getMessages(group.gid);
+    let { messages } = await db.getMessages(group.gid);
 
-    if(groupMessages.length <= 1000) continue;
+    if(messages.length <= 1000) continue;
 
-    console.info(`Started training for ${group.gid} with ${groupMessages.length} messages.`);
+    console.info(`Started training for ${group.gid} with ${messages.length} messages.`);
 
-    let markov = new Markov(groupMessages, { 
+    let markov = new Markov(messages, { 
 
-      stateSize: groupMessages.length <= 1000 ? 1 : 2 
+      stateSize: messages.length <= 1000 ? 1 : 2 
 
     });
 

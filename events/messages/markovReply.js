@@ -11,11 +11,11 @@ module.exports = Composer.mount(
 
     const group = await db.findGroupByIdOrCreate(ctx);
 
-    let groupChat = await db.getMessages(ctx.chat.id);
+    let { messages } = await db.getMessages(ctx.chat.id);
 
-    let markov = new Markov(groupChat, { 
+    let markov = new Markov(messages, { 
 
-      stateSize: groupChat.length <= 1000 ? 1 : 2
+      stateSize: messages.length <= 1000 ? 1 : 2
 
     });
     
@@ -54,30 +54,29 @@ module.exports = Composer.mount(
 
     }
 
-    let debugMessage;
+    let replyMessage;
 
     try {
       
       const markovReply = await markov.generateAsync(markovOptions);
 
-      if (!groupChat.debugMode) {
+      if (!group.debugMode) {
   
-        ctx.reply(markovReply.string);
+        replyMessage = markovReply.string;
   
       } else {
   
-        debugMessage = `<b>MESSAGGIO DEBUG</b>\n<b>Risposta:</b> ${markovReply.string}\n<b>Prove (tries):</b> ${markovReply.tries}\n<b>Score:</b> ${markovReply.score}\n<b>Refs:</b> ${JSON.stringify(markovReply.refs)}`;
+        replyMessage = `<b>MESSAGGIO DEBUG</b>\n<b>Risposta:</b> ${markovReply.string}\n<b>Prove (tries):</b> ${markovReply.tries}\n<b>Score:</b> ${markovReply.score}\n<b>Refs:</b> ${JSON.stringify(markovReply.refs)}`;
   
       }
       
     } catch (error) {
 
-      debugMessage = `<b>MESSAGGIO DEBUG</b>\n<b>Errore:</b> ${error.message}`;
+      replyMessage = `<b>MESSAGGIO DEBUG</b>\n<b>Errore:</b> ${error.message}`;
       
     }
 
-    if(groupChat.debugMode)
-      ctx.replyWithHTML(debugMessage);
+    ctx.replyWithHTML(replyMessage);
 
     await db.addMessage(ctx.chat.id, ctx.message.text);
 

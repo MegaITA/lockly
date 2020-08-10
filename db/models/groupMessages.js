@@ -5,7 +5,7 @@ const group = require('./group');
 const groupMessages = sequelize.define('groupMessages', {
 
   messages: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
+    type: DataTypes.ARRAY(DataTypes.TEXT()),
     required: true,
     defaultValue: []
   }

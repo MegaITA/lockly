@@ -86,7 +86,7 @@ module.exports = {
     if(!groupChat)
       return false;
 
-    return groupChat.messages;
+    return groupChat;
   
   },
 

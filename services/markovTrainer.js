@@ -1,11 +1,14 @@
 const db = require('../db/databaseManager');
 const Markov = require('markov-strings').default;
 
-module.exports = async () => {
+(async () => {
 
   const groupsArray = await db.getGroups();
 
-  console.info(`Starting scheduled training job at ${Date.now()}`);
+  let startDate = new Date();
+
+  console.log(`Working on process: ${process.pid}`)
+  console.log(`Starting scheduled training job at ${startDate.getHours()}:${startDate.getMinutes()}`);
 
   let i = 0;
   
@@ -15,7 +18,7 @@ module.exports = async () => {
 
     if(messages.length <= 1000) continue;
 
-    console.info(`Started training for ${group.gid} with ${messages.length} messages.`);
+    console.log(`Started training for ${group.gid} with ${messages.length} messages.`);
 
     let markov = new Markov(messages, { 
 
@@ -27,12 +30,16 @@ module.exports = async () => {
 
     await db.updateOrCreateCorpus(group.gid, markov.corpus);
     
-    console.info(`Finished training for ${group.gid}.`);
+    console.log(`Finished training for ${group.gid}.`);
 
     i++;
 
   }
 
-  console.info(`Finished training job at ${Date.now()}. Trained ${i} groups.`);
+  let endDate = new Date();
 
-}
+  console.log(`Finished training job at ${endDate.getHours()}:${endDate.getMinutes()}. Trained ${i} groups.`);
+
+  process.exit();
+
+})();

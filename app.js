@@ -2,11 +2,14 @@ const telegraf = require('telegraf');
 const dotenv = require('dotenv').config();
 const Composer = require('telegraf/composer');
 const scheduler = require('node-schedule');
-const markovTrainer = require('./utils/markovTrainer');
+const TrainerService = require('./services/TrainerService');
 const telegramParser = require('./utils/telegramParser');
 const db = require('./db/db');
 
-const trainJob = scheduler.scheduleJob('trainJob', '*/30 * * * *', markovTrainer);
+let trainerService = new TrainerService();
+
+const trainJob = scheduler.scheduleJob('trainJob', '*/30 * * * *', trainerService.startThreadedTraining);
+
 
 const bot = new telegraf.Telegraf(process.env.BOT_TOKEN);
 

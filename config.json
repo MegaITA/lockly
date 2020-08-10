@@ -8,6 +8,12 @@
     "username": "lockly",
     "password": "changemeplease"
 
+  },
+  
+  "bot": {
+
+    "messagesArrayMaxSize": 20000
+
   }
 
 }

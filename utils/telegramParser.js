@@ -1,6 +1,6 @@
 const db = require('../db/databaseManager');
 const fs = require('fs');
-const groupMessages = require('../db/models/groupMessages');
+const { bot } = require('../config.json');
 
 module.exports = {
 
@@ -24,7 +24,7 @@ module.exports = {
 
     // console.log(parsedMessages.length);
 
-    groupChat.messages = parsedMessages;
+    groupChat.messages = parsedMessages.slice(parsedMessages.length - ( bot.messagesArrayMaxSize - 1 ), parsedMessages.length);
 
     groupChat.save();
 

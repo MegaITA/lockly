@@ -3,6 +3,7 @@ const GroupMessages = require('./models/groupMessages');
 const GroupCorpus = require('./models/groupCorpus');
 const sequelize = require('sequelize');
 const groupMessages = require('./models/groupMessages');
+const { bot } = require('../config.json');
 
 module.exports = {
 
@@ -95,7 +96,13 @@ module.exports = {
     let groupChat = await GroupMessages.findOne({ where: { groupGid: gid } });
 
     // Creating a new array instead of pushing since sequelize doesn't detect push changes and refuses to save the array.
-    let newArr = [message, ...groupChat.messages];
+    // Slicing in order to limit the messages size 
+    // I already tried with something like 300k messages and a black hole appeared and ate my fucking RAM
+    let newArr = [
+      message, 
+      ...groupChat.messages
+        .slice(groupChat.messages.length - (bot.messagesArrayMaxSize - 1), groupChat.messages.length)
+    ];
 
     groupChat.messages = newArr;
 

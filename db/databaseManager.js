@@ -1,6 +1,6 @@
 const Group = require('./models/group');
 const GroupMessages = require('./models/groupMessages');
-const GroupCorpus = require('./models/groupCorpus');
+const GroupMarkovData = require('./models/groupMarkovData');
 const sequelize = require('sequelize');
 const groupMessages = require('./models/groupMessages');
 const { bot } = require('../config.json');
@@ -44,27 +44,27 @@ module.exports = {
 
   },
   
-  getCorpus: async (gid) => {
+  getMarkovData: async (gid) => {
 
-    let corpus = await GroupCorpus.findOne({ where: { groupGid: gid } });
+    let groupMarkovData = await GroupMarkovData.findOne({ where: { groupGid: gid } });
 
-    if(!corpus)
+    if(!groupMarkovData)
       return false;
 
-    return corpus;
+    return groupMarkovData;
 
   },
 
-  updateOrCreateCorpus: async (gid, corpus) => {
+  updateOrCreateMarkovData: async (gid, markovData) => {
 
-    let groupChat = await GroupCorpus.findOne({ where: { groupGid: gid } });
+    let groupMarkovData = await GroupMarkovData.findOne({ where: { groupGid: gid } });
 
-    if(!groupChat) {
+    if(!groupMarkovData) {
 
-      let newCorpus = await GroupCorpus.create({
+      let newMarkovData = await GroupMarkovData.create({
 
         groupGid: gid,
-        corpus: corpus
+        markovData: markovData
 
       });
 
@@ -72,9 +72,9 @@ module.exports = {
 
     }
 
-    groupChat.corpus = corpus;
+    groupMarkovData.markovData = markovData;
 
-    groupChat.save();
+    groupMarkovData.save();
 
     return true;
 
@@ -116,13 +116,13 @@ module.exports = {
 
     let groupChat = await GroupMessages.findOne({ where: { groupGid: gid } });
 
-    let groupCorpus = await GroupCorpus.findOne({ where: { groupGid: gid } });
+    let groupMarkovData = await GroupMarkovData.findOne({ where: { groupGid: gid } });
 
-    if(groupCorpus) {
+    if(groupMarkovData) {
       
-      groupCorpus.corpus = {};
+      groupMarkovData.markovData = {};
 
-      await groupCorpus.save();
+      await groupMarkovData.save();
 
     }
 

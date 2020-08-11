@@ -2,9 +2,9 @@ const { DataTypes, Sequelize } = require('sequelize');
 const sequelize = require('../db');
 const group = require('./group');
 
-const groupCorpus = sequelize.define('groupCorpus', {
+const groupMarkovData = sequelize.define('groupMarkovData', {
 
-  corpus: {
+  markovData: {
     type: DataTypes.JSON,
     required: true,
     defaultValue: {} 
@@ -12,7 +12,7 @@ const groupCorpus = sequelize.define('groupCorpus', {
 
 }, { timestamps: false });
 
-groupCorpus.belongsTo(group);
-groupCorpus.sync();
+groupMarkovData.belongsTo(group);
+groupMarkovData.sync();
 
-module.exports = groupCorpus;
+module.exports = groupMarkovData;

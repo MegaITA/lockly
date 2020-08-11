@@ -20,15 +20,15 @@ const Markov = require('markov-strings').default;
 
     console.log(`Started training for ${group.gid} with ${messages.length} messages.`);
 
-    let markov = new Markov(messages, { 
+    let markov = new Markov({ 
 
-      stateSize: messages.length <= 1000 ? 1 : 2 
+      stateSize: 1
 
     });
 
-    await markov.buildCorpusAsync();
+    await markov.addDataAsync(messages);
 
-    await db.updateOrCreateCorpus(group.gid, markov.corpus);
+    await db.updateOrCreateMarkovData(group.gid, markov.export());
     
     console.log(`Finished training for ${group.gid}.`);
 

@@ -24,7 +24,7 @@ module.exports = {
 
     // console.log(parsedMessages.length);
 
-    groupChat.messages = parsedMessages.slice(parsedMessages.length - ( bot.messagesArrayMaxSize - 1 ), parsedMessages.length);
+    groupChat.messages = parsedMessages.slice(parsedMessages.length - bot.messagesArrayMaxSize, parsedMessages.length);
 
     groupChat.save();
 

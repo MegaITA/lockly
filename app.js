@@ -10,7 +10,6 @@ let trainerService = new TrainerService();
 
 const trainJob = scheduler.scheduleJob('trainJob', '*/30 * * * *', trainerService.startThreadedTraining);
 
-
 const bot = new telegraf.Telegraf(process.env.BOT_TOKEN);
 
 // Middleware

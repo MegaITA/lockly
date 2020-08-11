@@ -12,7 +12,7 @@
   
   "bot": {
 
-    "messagesArrayMaxSize": 20000
+    "messagesArrayMaxSize": 200000
 
   }
 

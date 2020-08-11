@@ -10,7 +10,7 @@
   "license": "GPL-3.0",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "markov-strings": "^2.1.1",
+    "markov-strings": "https://github.com/MegaITA/markov-strings/tarball/e88297cf1a469b463b7adc0f706f300e533a4f96",
     "node-schedule": "^1.3.2",
     "pg": "^8.3.0",
     "pg-hstore": "^2.3.3",

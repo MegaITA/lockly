@@ -22,56 +22,58 @@ module.exports = Composer.mount(
     let { messages } = await db.getMessages(ctx.chat.id);
     
     // Load pre-trained corpus to make the bot faster, the corpus will be trained for each group every x time
-    let preTrainedCorpus = await db.getCorpus(ctx.chat.id);
+    let groupMarkovData = await db.getMarkovData(ctx.chat.id);
 
     let markov;
 
     // If we don't have already a pre-trained corpus, the group chat is new, so we will train it since it shouldn't take so long
-    if(!preTrainedCorpus) {
+    if(!groupMarkovData) {
 
 
-      markov = new Markov(messages, {
+      markov = new Markov({
 
-        stateSize: messages.length <= 1000 ? 1 : 2
+        stateSize: 1
 
       });
 
-      await markov.buildCorpusAsync();
+      await markov.addDataAsync(messages);
 
     } else {
 
-      // Putting "fake" messages to make it calculate the "fake" corpus that we will change with the real one.
-      markov = new Markov(['a', 'b', 'c'], {
+      markov = new Markov({
 
-        stateSize: messages.length <= 1000 ? 1 : 2
+        stateSize: 1
 
       });
 
-      // If we have the pre-trained corpus, build a small corpus and then change it with the pre-trained one 
-      // (if you have a better solution, please help me, I also tried to save the instance on the database but it's missing the methods)
+      // If we have the pre-trained data, import the stored one
 
-      await markov.buildCorpusAsync();
-
-      markov.corpus = preTrainedCorpus.corpus;
+      await markov.import(groupMarkovData.markovData);
 
     }
 
     // If can't train corpus due to a lack of messages and get back an empty object {}, just save the message and return
-    if(Object.keys(markov.corpus).length === 0) {
+    // if(!markov.corpus) {
 
-      if(group.debugMode)
-        ctx.replyWithHTML(`<b>MESSAGGIO DEBUG</b>\n<b>Errore:</b> Non sono riuscito a generare un messaggio per via della scarsa disponibilità di messaggi nel mio database.`)
+    //   if(group.debugMode)
+    //     ctx.replyWithHTML(`<b>MESSAGGIO DEBUG</b>\n<b>Errore:</b> Non sono riuscito a generare un messaggio per via della scarsa disponibilità di messaggi nel mio database.`)
 
-      await db.addMessage(ctx.chat.id, ctx.message.text);
+    //   await db.addMessage(ctx.chat.id, ctx.message.text);
 
-      return;
+    //   return;
     
-    }
+    // }
 
     const markovOptions = {
 
-      maxTries: 10000000,
-      prng: Math.random
+      maxTries: 1000,
+      prng: Math.random,
+      filter: (result) => {
+
+        return result.string.split(' ').length >= 5 &&
+          result.string.endsWith('.')
+
+      }
 
     }
 

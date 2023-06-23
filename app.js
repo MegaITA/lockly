@@ -20,6 +20,7 @@ groupCommands.command('/debug', require('./events/commands/debug'));
 groupCommands.command('/enable', require('./events/commands/enable'));
 groupCommands.command('/disable', require('./events/commands/disable'));
 groupCommands.command('/stats', require('./events/commands/stats'));
+groupCommands.command('/forceTraining', require('./events/commands/forceTraining'));
 groupCommands.command('/clearMessages', require('./events/commands/clearMessages'));
 groupCommands.on('callback_query', require('./events/callbacks/callbackQueryHandler'));
 

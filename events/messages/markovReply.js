@@ -1,6 +1,7 @@
 const Composer = require('telegraf/composer');
 const Markov = require('markov-strings').default;
 const db = require('../../db/databaseManager');
+const config = require('../../config.json')
 
 module.exports = Composer.mount(
   'message',
@@ -32,7 +33,7 @@ module.exports = Composer.mount(
 
       markov = new Markov({
 
-        stateSize: 1
+        stateSize: config.bot.stateSize
 
       });
 
@@ -42,7 +43,7 @@ module.exports = Composer.mount(
 
       markov = new Markov({
 
-        stateSize: 1
+        stateSize: config.bot.stateSize
 
       });
 
@@ -66,12 +67,11 @@ module.exports = Composer.mount(
 
     const markovOptions = {
 
-      maxTries: 1000,
+      maxTries: 5000,
       prng: Math.random,
       filter: (result) => {
 
-        return result.string.split(' ').length >= 5 &&
-          result.string.endsWith('.')
+        return result.string.split(' ').length >= 5
 
       }
 

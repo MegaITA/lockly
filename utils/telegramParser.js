@@ -1,7 +1,5 @@
 const db = require('../db/databaseManager');
 const fs = require('fs');
-const { bot } = require('../config.json');
-
 module.exports = {
 
   parseGroupJSON: async (groupID, path) => {
@@ -24,7 +22,7 @@ module.exports = {
 
     // console.log(parsedMessages.length);
 
-    groupChat.messages = parsedMessages.slice(parsedMessages.length - bot.messagesArrayMaxSize, parsedMessages.length);
+    groupChat.messages = parsedMessages.slice(parsedMessages.length - process.env.MAX_MESSAGES, parsedMessages.length);
 
     groupChat.save();
 

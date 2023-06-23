@@ -1,8 +1,7 @@
 const Sequelize = require('sequelize');
-const { database } = require('../config.json');
 
-const sequelize = new Sequelize(database.dbName, database.username, database.password, {
-    host: database.host,
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
+    host: 'lockly-db',
     dialect: 'postgres',
     logging: false
 });

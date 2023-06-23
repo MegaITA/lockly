@@ -3,7 +3,6 @@ const GroupMessages = require('./models/groupMessages');
 const GroupMarkovData = require('./models/groupMarkovData');
 const sequelize = require('sequelize');
 const groupMessages = require('./models/groupMessages');
-const { bot } = require('../config.json');
 
 module.exports = {
 
@@ -101,7 +100,7 @@ module.exports = {
     let newArr = [
       message, 
       ...groupChat.messages
-        .slice(groupChat.messages.length - (bot.messagesArrayMaxSize - 1), groupChat.messages.length)
+        .slice(groupChat.messages.length - (process.env.MAX_MESSAGES - 1), groupChat.messages.length)
     ];
 
     groupChat.messages = newArr;

@@ -22,7 +22,7 @@ const Markov = require('markov-strings').default;
 
     let markov = new Markov({ 
 
-      stateSize: 1
+      stateSize: process.env.STATE_SIZE
 
     });
 

@@ -6,6 +6,8 @@ module.exports = Composer.mount(
   'message',
   async (ctx) => {
 
+    console.log('Generating new message...')
+
     if (ctx.updateType != 'message' || !ctx.message.text)
       return;
 

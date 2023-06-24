@@ -1,7 +1,6 @@
 const Composer = require('telegraf/composer');
 const Markov = require('markov-strings').default;
 const db = require('../../db/databaseManager');
-const config = require('../../config.json')
 
 module.exports = Composer.mount(
   'message',
@@ -33,7 +32,7 @@ module.exports = Composer.mount(
 
       markov = new Markov({
 
-        stateSize: config.bot.stateSize
+        stateSize: process.env.STATE_SIZE
 
       });
 
@@ -43,7 +42,7 @@ module.exports = Composer.mount(
 
       markov = new Markov({
 
-        stateSize: config.bot.stateSize
+        stateSize: process.env.STATE_SIZE
 
       });
 
